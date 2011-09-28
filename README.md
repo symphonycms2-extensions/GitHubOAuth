@@ -7,9 +7,9 @@
 
 ## Installation
 
-1. Download the GitHub OAuth extension and upload the 'githuboauth' folder to the 'extensions' folder.
-2. Enable the extension by selecting "GitHub OAuth" in the list and choose `Enable` from the with-selected menu, then click Apply.
-3. Edit the application credentials and scope in the Preferences screen
+1. Download the GitHub OAuth extension and upload the `githuboauth` folder to the `extensions` folder.
+2. Enable the extension by selecting `GitHub OAuth` in the list and choose `Enable` from the with-selected menu, then click Apply.
+3. Edit the application credentials and scope in the `Preferences` screen
 
 ## Usage
 

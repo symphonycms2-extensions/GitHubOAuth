@@ -18,8 +18,8 @@
 					'website' => 'http://www.symphony-dev.net',
 					'email' => 'r.bolte@gmail.com'
 				),
-				'version' => '0.1',
-				'release-date' => '2011-09-25',
+				'version' => '0.1.0',
+				'release-date' => '2011-09-28',
 				'trigger-condition' => ''
 			);
 		}
