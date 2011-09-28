@@ -5,19 +5,23 @@
 	require_once(TOOLKIT . '/class.event.php');
 	
 	Class eventgithub_authenticate extends Event{
+
+		public function __construct(&$parent, $env = null) {
+			parent::__construct($parent, $env);
+		}
 		
 		public static function about(){
 			return array(
-						'name' => __('GitHub Authentication'),
-						'author' => array(
-										array(	'name' => 'Remie Bolte',
-												'website' => 'http://www.symphony-dev.net',
-										   		'email' => 'r.bolte@gmail.com'
-										),
-						),
-						'version' => '0.1',
-						'release-date' => '2011-09-25',
-						'trigger-condition' => '');
+				'name' => __('GitHub Authentication'),
+				'author' => array(
+					'name' => 'Remie Bolte',
+					'website' => 'http://www.symphony-dev.net',
+					'email' => 'r.bolte@gmail.com'
+				),
+				'version' => '0.1',
+				'release-date' => '2011-09-25',
+				'trigger-condition' => ''
+			);
 		}
 
 		public function load(){
@@ -25,11 +29,15 @@
 		}
 
 		public static function documentation(){
-			return __('This event redirects users to the GitHub login page');
+			return new XMLElement('p', 'This is an event that redirects users to the GitHub login page for authentication.');
 		}
 
 		protected function __trigger(){
-
+			$clientId = Symphony::Configuration()->get('client_id', 'githuboauth');
+			$scope = Symphony::Configuration()->get('scope', 'githuboauth');
+			$redirectUrl = Symphony::Configuration()->get('auth_redirect', 'githuboauth');
+			
+			header('Location: https://github.com/login/oauth/authorize?client_id=' . $clientId . '&redirect_uri=' . $redirectUrl . '&scope=' . $scope);
+			exit;
 		}
-
 	}
