@@ -39,6 +39,11 @@
                     'delegate' => 'FrontendProcessEvents',
                     'callback' => 'appendEventXML'
                 ),
+				array(
+                    'page' => '/frontend/',
+                    'delegate' => 'FrontendParamsResolve',
+                    'callback' => 'appendAccessToken'
+                ),
     		);
     	}
     
@@ -131,13 +136,15 @@
     		$scope = implode(',', $_REQUEST['settings']['githuboauth']['scope']);
     		$context['settings']['githuboauth']['scope'] = $scope;
     	}
+
+		private function __getAccessToken() {
+			$cookie = new Cookie('github',TWO_WEEKS, __SYM_COOKIE_PATH__, null, true);
+            $token = $cookie->get('token');
+		}
         
         public function appendEventXML(array $context = null) {
-            $cookie = new Cookie('github',TWO_WEEKS, __SYM_COOKIE_PATH__, null, true);
-            $token = $cookie->get('token');
-
             $result = new XMLElement('github');
-			if($token) {
+			if($token = $this->__getAccessToken();) {
 				$result->setAttributearray(array(
 					'logged-in' => 'yes',
 					'token' => $token
@@ -149,6 +156,12 @@
 
 			$context['wrapper']->appendChild($result);
         }
+
+		public function appendAccessToken($context) {
+			if($token = $this->__getAccessToken();) {
+				$context['params']['github-access-token'] = $token;
+			}
+		}
 
     }
 
