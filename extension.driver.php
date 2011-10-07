@@ -140,11 +140,13 @@
 		private function __getAccessToken() {
 			$cookie = new Cookie('github',TWO_WEEKS, __SYM_COOKIE_PATH__, null, true);
             $token = $cookie->get('token');
+			return $token;
 		}
         
         public function appendEventXML(array $context = null) {
             $result = new XMLElement('github');
-			if($token = $this->__getAccessToken()) {
+			$token = $this->__getAccessToken();
+			if($token) {
 				$result->setAttributearray(array(
 					'logged-in' => 'yes',
 					'token' => $token
@@ -158,7 +160,8 @@
         }
 
 		public function appendAccessToken($context) {
-			if($token = $this->__getAccessToken()) {
+			$token = $this->__getAccessToken();
+			if($token) {
 				$context['params']['github-access-token'] = $token;
 			}
 		}
