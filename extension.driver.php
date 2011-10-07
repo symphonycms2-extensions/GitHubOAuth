@@ -144,7 +144,7 @@
         
         public function appendEventXML(array $context = null) {
             $result = new XMLElement('github');
-			if($token = $this->__getAccessToken();) {
+			if($token = $this->__getAccessToken()) {
 				$result->setAttributearray(array(
 					'logged-in' => 'yes',
 					'token' => $token
@@ -158,7 +158,7 @@
         }
 
 		public function appendAccessToken($context) {
-			if($token = $this->__getAccessToken();) {
+			if($token = $this->__getAccessToken()) {
 				$context['params']['github-access-token'] = $token;
 			}
 		}
