@@ -44,6 +44,11 @@
                     'delegate' => 'FrontendParamsResolve',
                     'callback' => 'appendAccessToken'
                 ),
+				array(
+					'page' => '/frontend/',
+					'delegate' => 'FrontendPageResolved',
+					'callback' => 'frontendPageResolved'
+				),
     		);
     	}
     
@@ -163,6 +168,15 @@
 			$token = $this->__getAccessToken();
 			if($token) {
 				$context['params']['github-access-token'] = $token;
+			}
+		}
+		
+		public function frontendPageResolved($context) {
+			if(isset($_REQUEST['github-oauth-action']) && isset($_REQUEST['github-oauth-action']) == 'logout'){
+				$cookie = new Cookie('github');
+	            $cookie->expire();
+				if(isset($_REQUEST['redirect'])) redirect($_REQUEST['redirect']);
+				redirect(URL);
 			}
 		}
 
