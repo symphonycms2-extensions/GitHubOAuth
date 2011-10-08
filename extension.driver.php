@@ -39,6 +39,16 @@
                     'delegate' => 'FrontendProcessEvents',
                     'callback' => 'appendEventXML'
                 ),
+				array(
+                    'page' => '/frontend/',
+                    'delegate' => 'FrontendParamsResolve',
+                    'callback' => 'appendAccessToken'
+                ),
+				array(
+					'page' => '/frontend/',
+					'delegate' => 'FrontendPageResolved',
+					'callback' => 'frontendPageResolved'
+				),
     		);
     	}
     
@@ -131,12 +141,16 @@
     		$scope = implode(',', $_REQUEST['settings']['githuboauth']['scope']);
     		$context['settings']['githuboauth']['scope'] = $scope;
     	}
+
+		private function __getAccessToken() {
+			$cookie = new Cookie('github',TWO_WEEKS, __SYM_COOKIE_PATH__, null, true);
+            $token = $cookie->get('token');
+			return $token;
+		}
         
         public function appendEventXML(array $context = null) {
-            $cookie = new Cookie('github',TWO_WEEKS, __SYM_COOKIE_PATH__, null, true);
-            $token = $cookie->get('token');
-
             $result = new XMLElement('github');
+			$token = $this->__getAccessToken();
 			if($token) {
 				$result->setAttributearray(array(
 					'logged-in' => 'yes',
@@ -149,6 +163,22 @@
 
 			$context['wrapper']->appendChild($result);
         }
+
+		public function appendAccessToken($context) {
+			$token = $this->__getAccessToken();
+			if($token) {
+				$context['params']['github-access-token'] = $token;
+			}
+		}
+		
+		public function frontendPageResolved($context) {
+			if(isset($_REQUEST['github-oauth-action']) && isset($_REQUEST['github-oauth-action']) == 'logout'){
+				$cookie = new Cookie('github');
+	            $cookie->expire();
+				if(isset($_REQUEST['redirect'])) redirect($_REQUEST['redirect']);
+				redirect(URL);
+			}
+		}
 
     }
 
